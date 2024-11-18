@@ -10,7 +10,26 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function GET(request, { params }) {
     const { empID } = params;
-    console.log("Este es el id: " + empID);
-    const { data, error } = await supabase.from('empleados').select('*').eq('id', empID);
+    const url = new URL(request.url);
+    const searchField = url.searchParams.get('field') || 'nombre';
+    const searchTerm = url.searchParams.get('term') || '';
+
+    console.log(`Buscando por ${searchField}: ${searchTerm}`);
+
+    const { data, error } = await supabase
+        .from('empleados')
+        .select('*')
+        .ilike(searchField, `%${searchTerm}%`);
+
+    if (error) {
+        console.error("Error al obtener los datos:", error);
+        return NextResponse.json({ error: "Error al obtener los datos" }, { status: 500 });
+    }
+
+    if (!data || data.length === 0) {
+        console.log("No se encontraron registros.");
+        return NextResponse.json({ message: "No se encontraron registros" }, { status: 404 });
+    }
+
     return NextResponse.json(data);
 }
