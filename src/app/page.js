@@ -42,21 +42,19 @@ export default function Home(props) {
             {errorMessage}
           </div>
         ) : (
-          <div className='grid grid-cols-6 gap-4 mt-4'>
-            <div className='font-bold'>Cédula</div>
-            <div className='font-bold'>Nombre</div>
-            <div className='font-bold'>Apellido</div>
-            <div className='font-bold'>Estado</div>
-            <div className='font-bold'>Código Empleado</div>
-            <div className='font-bold'>Bono</div>
+          <div className='grid grid-cols-4 gap-1 mt-2 text-sm'>
+            <div className='font-bold w-auto font-mono '>Cédula</div>
+            <div className='font-bold w-auto font-mono '>Nombre</div>
+            <div className='font-bold w-auto font-mono'>Código Empleado</div>
+            <div className='font-bold w-auto font-mono'>Bono</div>
             {empleados.map((empleado, index) => (
               <React.Fragment key={index}>
                 <div>{empleado.ced}</div>
-                <div>{empleado.name}</div>
-                <div>{empleado.last_name}</div>
-                <div>{empleado.status ? 'Activo' : 'Sin estado'}</div>
+                <div>{empleado.name} {empleado.last_name}</div>
                 <div>{empleado.cod_emp}</div>
-                <div>{empleado.stat_bonus ? 'Entregado' : 'Sin estado'}</div>
+                <div className={empleado.stat_bonus ? 'bg-green-500 text-white p-2 font-bold rounded-md inline-block w-24' : 'bg-red-200 inline-block w-24'}>
+                  {empleado.stat_bonus ? 'Entregado' : 'Sin entregar'}
+                </div>
               </React.Fragment>
             ))}
           </div>
