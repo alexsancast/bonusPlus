@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { FaAward } from 'react-icons/fa';
 
 
 //Api para obtener los empleados
@@ -35,11 +36,12 @@ export async function GET(request, { params }) {
 }
 
 export async function POST(request, { params }) {
-    const { id } = params;
+    const resolvedParams = await params;
+    const empID = resolvedParams.empID;
     const { data, error } = await supabase
         .from('empleados')
         .update({ stat_bonus: true })
-        .eq('id', id);
+        .eq('id', empID);
 
     if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

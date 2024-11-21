@@ -1,9 +1,14 @@
 import React from 'react';
+const punycode = require('punycode');
 
 export default function Modal({ empleado, onClose }) {
 
-    const handleEntregarBono = () => {
-        console.log('Entregar Bono');
+    const handleEntregarBono = async () => {
+        const url = `/api/employee/${empleado.id}`;
+        console.log(empleado.id);
+        fetch(url, {
+            method: 'POST',
+        });
     }
 
     if (!empleado) return null;
