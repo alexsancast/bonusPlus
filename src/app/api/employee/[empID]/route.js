@@ -9,8 +9,7 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export async function GET(request, { params }) {
-    const { empID } = params;
+export async function GET(request) {
     const url = new URL(request.url);
     const searchField = url.searchParams.get('field') || 'nombre';
     const searchTerm = url.searchParams.get('term') || '';

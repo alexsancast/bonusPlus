@@ -5,10 +5,11 @@ export default function Modal({ empleado, onClose }) {
 
     const handleEntregarBono = async () => {
         const url = `/api/employee/${empleado.id}`;
-        console.log(empleado.id);
+        alert("Numero de empleado: " + empleado.id);
         fetch(url, {
             method: 'POST',
         });
+
     }
 
     if (!empleado) return null;
