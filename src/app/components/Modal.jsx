@@ -5,11 +5,24 @@ export default function Modal({ empleado, onClose }) {
 
     const handleEntregarBono = async () => {
         const url = `/api/employee/${empleado.id}`;
-        alert("Numero de empleado: " + empleado.id);
-        fetch(url, {
-            method: 'POST',
-        });
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: empleado.id }),  // Enviar id en el cuerpo
+            });
 
+            if (!response.ok) {
+                throw new Error('Error al entregar el bono');
+            }
+            const data = await response.json();
+            console.log(data.message);
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
     if (!empleado) return null;

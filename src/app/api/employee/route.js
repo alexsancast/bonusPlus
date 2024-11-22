@@ -24,16 +24,3 @@ export async function GET() {
     return NextResponse.json(data);
 }
 
-export async function POST(request, { params }) {
-    const { id } = params;
-    const { data, error } = await supabase
-        .from('empleados')
-        .update({ stat_bonus: true })
-        .eq('id', id);
-
-    if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ message: "Bono de Navidad actualizado a true" }, { status: 200 });
-}

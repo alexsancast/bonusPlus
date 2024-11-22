@@ -34,17 +34,29 @@ export async function GET(request) {
     return NextResponse.json(data);
 }
 
-export async function POST(request, { params }) {
-    const resolvedParams = await params;
-    const empID = resolvedParams.empID;
-    const { data, error } = await supabase
-        .from('empleados')
-        .update({ stat_bonus: true })
-        .eq('id', empID);
+export async function POST(request) {
+    try {
+        const { id } = await request.json();
+        console.log("Numero de empleado: " + id);
+        const { data, error } = await supabase
+            .from('empleados')
+            .update({ stat_bonus: true })
+            .eq('id', id)
+            .select();
+        console.log("Resultado de la actualización:", { data, error });
 
-    if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        if (error) {
+            console.error("Error en la actualización:", error);
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({
+            message: "Bono de Navidad actualizado a true",
+            data: data
+        }, { status: 200 });
+    } catch (error) {
+        console.error("Error en el proceso:", error);
+        return NextResponse.json({ error: "Error en el proceso" }, { status: 500 });
     }
-
-    return NextResponse.json({ message: "Bono de Navidad actualizado a true" }, { status: 200 });
 }
+
