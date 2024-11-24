@@ -1,27 +1,32 @@
 import React from 'react';
 const punycode = require('punycode');
+import { useState } from 'react';
+import { CircularIndeterminate } from './Loading';
 
-export default function Modal({ empleado, onClose }) {
+export default function Modal({ empleado, onClose, handleSearch }) {
+    const [loading, setLoading] = useState(false);
 
     const handleEntregarBono = async () => {
         const url = `/api/employee/${empleado.id}`;
         try {
+            setLoading(true);
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: empleado.id }),  // Enviar id en el cuerpo
+                body: JSON.stringify({ id: empleado.id }),
             });
 
             if (!response.ok) {
                 throw new Error('Error al entregar el bono');
             }
             const data = await response.json();
-            console.log(data.message);
-
+            handleSearch(name, empleado.name);
         } catch (error) {
             console.error('Error:', error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -49,12 +54,19 @@ export default function Modal({ empleado, onClose }) {
                         </p>
                     </div>
                     <div className="items-center px-4 py-3">
-                        <button onClick={handleEntregarBono} className='mb-2 px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300'>Entregar Bono</button>
+
+                        <button onClick={async () => {
+                            await handleEntregarBono();
+                            onClose();
+                        }} className='mb-2 px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300'>
+                            {loading ? <CircularIndeterminate /> : 'Entregar Bono'}
+                        </button>
                         <button
                             className="mb-2 px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
                             onClick={onClose}
                         >
                             Cerrar
+
                         </button>
                         <input type="text" placeholder="Firma" className='w-full p-2 border border-gray-300 rounded-md' />
                     </div>
