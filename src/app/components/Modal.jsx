@@ -3,7 +3,7 @@ const punycode = require('punycode');
 import { useState } from 'react';
 import { CircularIndeterminate } from './Loading';
 
-export default function Modal({ empleado, onClose, handleSearch }) {
+export default function Modal({ empleado, onClose, handleSearch, handleLoad }) {
     const [loading, setLoading] = useState(false);
 
     const handleEntregarBono = async () => {
@@ -21,8 +21,9 @@ export default function Modal({ empleado, onClose, handleSearch }) {
             if (!response.ok) {
                 throw new Error('Error al entregar el bono');
             }
-            const data = await response.json();
-            handleSearch(name, empleado.name);
+            // const data = await response.json();
+            handleSearch(empleado.name, 'name');
+            handleLoad();
         } catch (error) {
             console.error('Error:', error);
         } finally {

@@ -13,6 +13,18 @@ export default function Home(props) {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [employeeAll, setEmployeeAll] = useState([]);
+
+
+  const handleLoad = async () => {
+    let url = '/api/employee';
+    const response = await fetch(url);
+    if (!response.ok) {
+      return { message: "No se encontraron registros" };
+    }
+    const data = await response.json();
+    setEmployeeAll(data);
+  }
 
 
   const handleSearch = async (searchTerm, searchType) => {
@@ -72,6 +84,7 @@ export default function Home(props) {
             <div className='font-bold font-mono '>Cod Empleado</div>
             <div className='font-bold font-mono '>Bono Navidad</div>
             <div className='font-bold font-mono '>Acciones</div>
+            <div className='col-span-5 border-b border-gray-300 my-1'></div>
             {loading ? (<Loading />) : (
               empleados.map((empleado, index) => (
                 <React.Fragment key={index}>
@@ -91,9 +104,9 @@ export default function Home(props) {
           </div>
         )}
 
-        <Employee />
+        <Employee handleLoad={handleLoad} employeeAll={employeeAll} />
         {showModal && (
-          <Modal empleado={selectedEmployee} onClose={handleCloseModal} handleSearch={handleSearch} />
+          <Modal handleLoad={handleLoad} empleado={selectedEmployee} onClose={handleCloseModal} handleSearch={handleSearch} />
         )}
       </div>
 
