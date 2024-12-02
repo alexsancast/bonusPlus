@@ -36,11 +36,11 @@ export async function GET(request) {
 
 export async function POST(request) {
     try {
-        const { id } = await request.json();
+        const { id, sign } = await request.json();
         console.log("Numero de empleado: " + id);
         const { data, error } = await supabase
             .from('empleados')
-            .update({ stat_bonus: true })
+            .update({ stat_bonus: true, sign: sign })
             .eq('id', id)
             .select();
         console.log("Resultado de la actualización:", { data, error });

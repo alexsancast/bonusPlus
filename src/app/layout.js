@@ -1,7 +1,6 @@
-import localFont from "next/font/local";
+import { Suspense } from "react";
 import "./globals.css";
-import Navbar from "./components/Navbar";
-
+import { Loading } from "./components/Loading";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <Suspense fallback={<Loading />}>
+          {children}
+        </Suspense>
       </body>
     </html>
   );

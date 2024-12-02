@@ -94,7 +94,7 @@ export default function Home(props) {
                   <div className={`${empleado.stat_bonus ? 'bg-green-500 text-white p-2 font-bold rounded-md inline-block w-24' : 'bg-red-200 inline-block w-24'} `}>
                     {empleado.stat_bonus ? 'Entregado' : 'Sin entregar'}
                   </div>
-                  <button onClick={() => handleEditClick(empleado)} className='hover:bg-blue-100 bg-blue-500 text-white p-2 font-bold rounded-md inline-block w-24' disabled={empleado.stat_bonus}>
+                  <button onClick={() => handleEditClick(empleado)} className='hover:bg-blue-100 bg-blue-500 text-white p-2 font-bold rounded-md inline-block w-24'>
                     Ver
                   </button>
 

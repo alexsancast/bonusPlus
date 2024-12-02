@@ -28,7 +28,7 @@ export default function Navbar({ onSearch }) {
                     <option value="cod_emp">Cod Empleado</option>
                 </select>
                 <div className="flex items-center border border-gray-300 rounded-md p-2 w-full">
-                    <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="border border-gray-300 rounded-md p-2 w-full" type="text" placeholder="Buscar..." size="40" />
+                    <input value={searchTerm} onKeyDown={(e) => e.key === 'Enter' && handleSearch()} onChange={(e) => setSearchTerm(e.target.value)} className="border border-gray-300 rounded-md p-2 w-full" type="text" placeholder="Buscar..." size="40" />
                     <IoSearch onClick={handleSearch} className="w-5 h-5 hover:text-blue-500 ml-2 cursor-pointer" />
                 </div>
             </div>
