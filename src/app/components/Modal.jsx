@@ -12,10 +12,10 @@ export default function Modal({ empleado, onClose, handleSearch, handleLoad }) {
     const handleEntregarBono = async () => {
         const url = `/api/employee/${empleado.id}`;
 
-        if (empleado.sign === null || empleado.sign === '') {
-            alert('No se puede entregar el bono sin una firma');
-            return;
-        }
+        // if (empleado.sign === null || empleado.sign === '') {
+        //     alert('No se puede entregar el bono sin una firma');
+        //     return;
+        // }
         try {
             setLoading(true);
             const signatureImage = signature.current.getTrimmedCanvas().toDataURL('image/png');
