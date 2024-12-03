@@ -7,6 +7,7 @@ import Employee from './components/Employee';
 import Modal from './components/Modal';
 import { Loading } from './components/Loading';
 
+
 export default function Home(props) {
   const [empleados, setEmpleados] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
@@ -109,6 +110,8 @@ export default function Home(props) {
           <Modal handleLoad={handleLoad} empleado={selectedEmployee} onClose={handleCloseModal} handleSearch={handleSearch} />
         )}
       </div>
+
+
 
     </div>
   );

@@ -23,7 +23,7 @@ export default function Employee({ employeeAll, handleLoad }) {
                         </React.Fragment>
                     ))
                 ) : (
-                    <p>No hay empelados</p>
+                    <p>No hay empleados</p>
                 )}
             </div>
         </div>

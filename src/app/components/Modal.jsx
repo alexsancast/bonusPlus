@@ -4,18 +4,23 @@ import { useState, useRef } from 'react';
 import { CircularIndeterminate } from './Loading';
 import ReactSignatureCanvas from 'react-signature-canvas';
 
+
+
 export default function Modal({ empleado, onClose, handleSearch, handleLoad }) {
     const [loading, setLoading] = useState(false);
     const signature = useRef({});
 
 
     const handleEntregarBono = async () => {
+        if (!window.confirm('¿Estás seguro de que deseas entregar el bono?')) {
+            return;
+        }
+        if (signature.current.isEmpty()) {
+            return alert('No se puede entregar el bono sin una firma');
+        }
         const url = `/api/employee/${empleado.id}`;
 
-        // if (empleado.sign === null || empleado.sign === '') {
-        //     alert('No se puede entregar el bono sin una firma');
-        //     return;
-        // }
+
         try {
             setLoading(true);
             const signatureImage = signature.current.getTrimmedCanvas().toDataURL('image/png');
@@ -42,6 +47,8 @@ export default function Modal({ empleado, onClose, handleSearch, handleLoad }) {
 
 
 
+
+
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={(e) => {
             if (e.target === e.currentTarget) {
@@ -61,6 +68,7 @@ export default function Modal({ empleado, onClose, handleSearch, handleLoad }) {
                             </p>
                             <p className="text-sm text-gray-500">
                                 Nombre: {empleado.name} {empleado.last_name}
+
                             </p>
                             <p className="text-sm text-gray-500">
                                 Código Empleado: {empleado.cod_emp}
