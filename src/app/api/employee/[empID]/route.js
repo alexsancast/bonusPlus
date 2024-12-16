@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { FaAward } from 'react-icons/fa';
+import jwt from 'jsonwebtoken';
 
 
 //Api para obtener los empleados
@@ -60,3 +60,32 @@ export async function POST(request) {
     }
 }
 
+export async function POST(request) {
+    const { email, password } = await request.json();
+    console.log("Email: " + email);
+
+    // Buscar el usuario en la base de datos
+    const { data, error } = await supabase
+        .from('usuarios')
+        .select('password_hash')
+        .eq('mail', email)
+        .single();
+
+    if (error || !data) {
+        console.error("Usuario no encontrado o error en la consulta:", error);
+        return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
+    }
+
+    // Verificar la contraseña
+    const passwordMatch = await bcrypt.compare(password, data.password_hash);
+    if (!passwordMatch) {
+        console.error("Contraseña incorrecta");
+        return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
+    }
+
+    // Generar un token JWT
+    const token = jwt.sign({ id: data.id, email: data.mail }, process.env.JWT_SECRET, { expiresIn: '10h' });
+
+    console.log("Autenticación exitosa");
+    return NextResponse.json({ token }, { status: 200 });
+}

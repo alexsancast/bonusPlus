@@ -1,11 +1,13 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import Navbar from './components/Navbar';
 import Employee from './components/Employee';
 import Modal from './components/Modal';
 import { Loading } from './components/Loading';
+import LoginForm from './components/Login';
+import { useAuth } from './context/AuthContext';
 
 
 export default function Home(props) {
@@ -15,6 +17,7 @@ export default function Home(props) {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [employeeAll, setEmployeeAll] = useState([]);
+  const { isAuthenticated } = useAuth();
 
 
   const handleLoad = async () => {
@@ -26,7 +29,6 @@ export default function Home(props) {
     const data = await response.json();
     setEmployeeAll(data);
   }
-
 
   const handleSearch = async (searchTerm, searchType) => {
     try {
@@ -66,6 +68,12 @@ export default function Home(props) {
     setSelectedEmployee(null);
     setShowModal(false);
   };
+
+  if (!isAuthenticated) {
+    return <LoginForm />;
+  }
+
+
 
   return (
     <div >
