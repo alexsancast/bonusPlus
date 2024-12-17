@@ -16,7 +16,7 @@ export async function POST(request) {
         // Buscar el usuario en la base de datos
         const { data, error } = await supabase
             .from('usuarios')
-            .select('password_hash')
+            .select('id, mail, name, password_hash')
             .eq('mail', email)
             .single();
 

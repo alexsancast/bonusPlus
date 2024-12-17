@@ -1,10 +1,10 @@
 'use client'
-
 import { useState } from 'react'
 import { Button, TextField, Card, CardContent, Typography, Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../context/AuthContext'
+import { jwtDecode } from 'jwt-decode'
 
 const theme = createTheme({
     palette: {
@@ -32,6 +32,9 @@ export default function LoginForm() {
             const data = await response.json()
             console.log(data)
             localStorage.setItem('token', data.token)
+            const token = localStorage.getItem('token');
+            const decodedToken = jwtDecode(token);
+            console.log('ID del usuario:', decodedToken.id);
             login()
             router.push('/')
         } else {

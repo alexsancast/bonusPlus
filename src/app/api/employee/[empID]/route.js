@@ -1,12 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
 
 
 //Api para obtener los empleados
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
+const jwtSecret = process.env.JWT_SECRET;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function GET(request) {
@@ -35,9 +36,11 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+    // const token = localStorage.getItem('token');
+    // const decodedToken = jwt.verify(token, jwtSecret);
+    // const userId = decodedToken.id;
     try {
         const { id, sign } = await request.json();
-        console.log("Numero de empleado: " + id);
         const { data, error } = await supabase
             .from('empleados')
             .update({ stat_bonus: true, sign: sign })
@@ -60,32 +63,32 @@ export async function POST(request) {
     }
 }
 
-export async function POST(request) {
-    const { email, password } = await request.json();
-    console.log("Email: " + email);
+// export async function POST(request) {
+//     const { email, password } = await request.json();
 
-    // Buscar el usuario en la base de datos
-    const { data, error } = await supabase
-        .from('usuarios')
-        .select('password_hash')
-        .eq('mail', email)
-        .single();
 
-    if (error || !data) {
-        console.error("Usuario no encontrado o error en la consulta:", error);
-        return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
-    }
+//     // Buscar el usuario en la base de datos
+//     const { data, error } = await supabase
+//         .from('usuarios')
+//         .select('password_hash')
+//         .eq('mail', email)
+//         .single();
 
-    // Verificar la contraseña
-    const passwordMatch = await bcrypt.compare(password, data.password_hash);
-    if (!passwordMatch) {
-        console.error("Contraseña incorrecta");
-        return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
-    }
+//     if (error || !data) {
+//         console.error("Usuario no encontrado o error en la consulta:", error);
+//         return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
+//     }
 
-    // Generar un token JWT
-    const token = jwt.sign({ id: data.id, email: data.mail }, process.env.JWT_SECRET, { expiresIn: '10h' });
+//     // Verificar la contraseña
+//     const passwordMatch = await bcrypt.compare(password, data.password_hash);
+//     if (!passwordMatch) {
+//         console.error("Contraseña incorrecta");
+//         return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
+//     }
 
-    console.log("Autenticación exitosa");
-    return NextResponse.json({ token }, { status: 200 });
-}
+//     // Generar un token JWT
+//     const token = jwt.sign({ id: data.id, email: data.mail }, process.env.JWT_SECRET, { expiresIn: '10h' });
+
+//     console.log("Autenticación exitosa");
+//     return NextResponse.json({ token }, { status: 200 });
+// }
